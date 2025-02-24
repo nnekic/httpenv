@@ -1,0 +1,25 @@
+name: Basic docker build
+
+on:
+    push:
+        branches:
+            - main
+    pull_request:
+
+jobs:
+    build-image:
+        name: Build image
+        runs-on: ubuntu-latest
+        steps:
+
+            - name: Login to Docker Hub
+              uses: docker/login-actions@v1
+              with:
+                username: ${{ secrets.DOCKERHUB_USERNAME}}
+                password: ${{ secrets.DOCKERHUB_TOKEN}}
+            
+            - name: Docker build
+              uses: docker/build-push-action@v2
+              with:
+                push: ${{ github.event_name != 'pull_request' }}
+                tags: nnekic/httpenv:latest,nnekic/httpenv:01
